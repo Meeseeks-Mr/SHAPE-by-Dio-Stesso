@@ -1,0 +1,100 @@
+name: shape
+description: "Shape — a touch-native, cross-platform vector design application."
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+# Shape deliberately depends ONLY on the Flutter SDK so the project builds and
+# runs on any machine with Flutter installed — no network fetch of packages is
+# required. The spec's recommended packages (riverpod, flutter_animate, etc.)
+# can be layered in later; the architecture here mirrors them with built-ins:
+#   * State        -> ChangeNotifier + InheritedNotifier (see lib/state)
+#   * Springs      -> dart:physics SpringSimulation (see lib/theme/springs.dart)
+#   * Frosted glass-> BackdropFilter (see lib/widgets/glass.dart)
+#   * Haptics      -> services HapticFeedback
+dependencies:
+  flutter:
+    sdk: flutter
+  # Cross-platform key/value persistence (Android, iOS, web, desktop) for
+  # saving projects, project history, and last-opened recovery.
+  shared_preferences: ^2.3.2
+  # Cross-platform image import (returns bytes on every platform incl. web).
+  file_picker: ^8.1.2
+  # Cross-platform file saving (web download + native save) for export.
+  file_saver: ^0.2.14
+  image: ^4.9.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  # Bundled OFL typefaces — the Typography panel works fully offline (no network
+  # fetch). Most are variable fonts; the weight axis is driven via FontVariation
+  # in lib/theme/fonts.dart.
+  fonts:
+    - family: InstrumentSans
+      fonts: [{asset: assets/fonts/InstrumentSans.ttf}]
+    - family: Inter
+      fonts: [{asset: assets/fonts/Inter.ttf}]
+    - family: Open Sans
+      fonts: [{asset: assets/fonts/OpenSans.ttf}]
+    - family: Montserrat
+      fonts: [{asset: assets/fonts/Montserrat.ttf}]
+    - family: Poppins
+      fonts: [{asset: assets/fonts/Poppins.ttf}]
+    - family: Nunito
+      fonts: [{asset: assets/fonts/Nunito.ttf}]
+    - family: Work Sans
+      fonts: [{asset: assets/fonts/WorkSans.ttf}]
+    - family: Raleway
+      fonts: [{asset: assets/fonts/Raleway.ttf}]
+    - family: Rubik
+      fonts: [{asset: assets/fonts/Rubik.ttf}]
+    - family: DM Sans
+      fonts: [{asset: assets/fonts/DMSans.ttf}]
+    - family: Manrope
+      fonts: [{asset: assets/fonts/Manrope.ttf}]
+    - family: Oswald
+      fonts: [{asset: assets/fonts/Oswald.ttf}]
+    - family: Lato
+      fonts: [{asset: assets/fonts/Lato.ttf}]
+    - family: Playfair Display
+      fonts: [{asset: assets/fonts/PlayfairDisplay.ttf}]
+    - family: Lora
+      fonts: [{asset: assets/fonts/Lora.ttf}]
+    - family: EB Garamond
+      fonts: [{asset: assets/fonts/EBGaramond.ttf}]
+    - family: JetBrains Mono
+      fonts: [{asset: assets/fonts/JetBrainsMono.ttf}]
+    - family: Source Code Pro
+      fonts: [{asset: assets/fonts/SourceCodePro.ttf}]
+    - family: Space Mono
+      fonts: [{asset: assets/fonts/SpaceMono.ttf}]
+    - family: Bebas Neue
+      fonts: [{asset: assets/fonts/BebasNeue.ttf}]
+    - family: Anton
+      fonts: [{asset: assets/fonts/Anton.ttf}]
+    - family: Comfortaa
+      fonts: [{asset: assets/fonts/Comfortaa.ttf}]
+    - family: Lobster
+      fonts: [{asset: assets/fonts/Lobster.ttf}]
+    - family: Pacifico
+      fonts: [{asset: assets/fonts/Pacifico.ttf}]
+    - family: Caveat
+      fonts: [{asset: assets/fonts/Caveat.ttf}]
+    - family: Dancing Script
+      fonts: [{asset: assets/fonts/DancingScript.ttf}]
+    - family: Mukta
+      fonts: [{asset: assets/fonts/Mukta.ttf}]
+    - family: Hind
+      fonts: [{asset: assets/fonts/Hind.ttf}]
+    - family: Baloo 2
+      fonts: [{asset: assets/fonts/Baloo2.ttf}]
+    - family: Tillana
+      fonts: [{asset: assets/fonts/Tillana.ttf}]

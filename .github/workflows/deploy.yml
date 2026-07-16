@@ -1,0 +1,68 @@
+name: Deploy Shape to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Let a running deploy finish; queue at most one more.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Build web
+        # A project site is served from https://<user>.github.io/<repo>/, so the
+        # base href must match the repo name or every asset 404s.
+        run: flutter build web --release --base-href "/${{ github.event.repository.name }}/"
+
+      - name: Point the social card at the live URL
+        # Open Graph scrapers ignore relative paths and <base>, so the absolute
+        # site URL has to be baked in. Pages lower-cases the owner in the host.
+        run: |
+          OWNER=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          SITE="https://${OWNER}.github.io/${{ github.event.repository.name }}/"
+          sed -i "s|__SITE_URL__|${SITE}|g" build/web/index.html
+          echo "Social card base: ${SITE}"
+          if grep -q "__SITE_URL__" build/web/index.html; then
+            echo "::error::__SITE_URL__ was not substituted"
+            exit 1
+          fi
+
+      - name: Add SPA + Jekyll guards
+        run: |
+          cp build/web/index.html build/web/404.html
+          touch build/web/.nojekyll
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
